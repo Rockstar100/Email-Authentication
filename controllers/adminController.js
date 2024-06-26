@@ -13,17 +13,14 @@ const registerAdmin = async (req, res) => {
             return res.status(400).json({ msg: "Admin already exists" });
         }
 
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create new admin
         const newAdmin = new Admin({
             email,
             username,
             password: hashedPassword
         });
 
-        // Save admin to database
         await newAdmin.save();
 
         res.status(201).json({ msg: "Admin registered successfully" });
@@ -33,24 +30,21 @@ const registerAdmin = async (req, res) => {
     }
 };
 
-// Login Admin
 const loginAdmin = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Find the admin by email
         const admin = await Admin.findOne({ email });
         if (!admin) {
             return res.status(400).json({ msg: "Invalid credentials" });
         }
 
-        // Check if the password matches
         const isMatch = await bcrypt.compare(password, admin.password);
         if (!isMatch) {
             return res.status(400).json({ msg: "Invalid credentials" });
         }
 
-        // Generate JWT token
+
         const payload = {
             admin: {
                 id: admin.id,
@@ -98,7 +92,7 @@ const deleteUserByUsername = async (req, res) => {
         if (!user) {
             return res.status(404).json({ msg: "User not found" });
         }
-        await user.deleteOne(); // Use deleteOne() to remove the user
+        await user.deleteOne(); 
         res.json({ msg: "User deleted successfully" });
     } catch (err) {
         console.error('Server Error:', err.message);

@@ -188,12 +188,19 @@ const getAllUsers = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-    const { emailOrUsername, password } = req.body;
     try {
-        // Find the user by email or username
-        let user = await userModel.findOne({
-            $or: [{ email: emailOrUsername }, { username: emailOrUsername }]
-        });
+        const { email, username, password } = req.body;
+        if (!((email && password) || (username && password))) {
+            return res.status(400).json({ msg: "Please provide either email or username along with password" });
+        }
+
+        let user = null;
+        if (email) {
+            user = await userModel.findOne({ email });
+        } else if (username) {
+            // Check if username is provided and fetch user by username
+            user = await userModel.findOne({ username });
+        }
 
         if (!user) {
             return res.status(400).json({ msg: "Invalid credentials" });
@@ -227,8 +234,9 @@ const loginUser = async (req, res) => {
     }
 };
 
+
+
 const getUserDetails = async (req, res) => {
-    console.log(req.user);
     try {
         // Extract user ID from the token
         const userId = req.user.user.id;

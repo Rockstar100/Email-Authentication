@@ -30,15 +30,12 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     dob : {
-        type : Date,
+        type : String,
     },
     description: {
         type: String,
     },
-    verified: {
-        type: Boolean,
-        default: false,
-    }, 
+
     
 
     });

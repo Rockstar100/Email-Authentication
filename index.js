@@ -27,14 +27,14 @@ app.use(
   })
 );
 app.use(morgan("dev"));
+  //routes
+  app.use('/api/user', require('./routes/userRoutes'))
+  app.use('/api/admin', require('./routes/adminRoutes'));
+
 
 app.get("*", (req, res) => {
     res.send("Hello I'm backend")
   })
-
-  //routes
-  app.use('/api/user', require('./routes/userRoutes'))
-  app.use('/api/admin', require('./routes/adminRoutes'));
 
 
   // Set the port

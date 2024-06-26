@@ -9,7 +9,7 @@ const { authenticateToken } = require('../models/auth');
 
 router.post('/register', registerAdmin);
 
-router.post('/login', authenticateToken,loginAdmin);
+router.post('/login', loginAdmin);
 
 router.get('/users', getAllUsers);
 

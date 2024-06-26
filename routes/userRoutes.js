@@ -5,11 +5,13 @@ const { authenticateToken } = require('../models/auth');
 
 router.post('/register', createUser);
 
-router.post('/login', authenticateToken,loginUser);
+router.post('/login',loginUser);
 router.get('/users', getAllUsers);
 router.post(`/verify`, verifyOtp);
 router.put('/update', authenticateToken, updateUserProfile);
 router.get('/profile', authenticateToken, getUserDetails);
+
+
 
 
 module.exports = router;

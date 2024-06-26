@@ -1,13 +1,13 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/adminModel');
+const userModel = require('../models/userModel');
 
 // Register Admin
 const registerAdmin = async (req, res) => {
     const { email, username, password } = req.body;
 
     try {
-        // Check if the admin already exists
         const existingAdmin = await Admin.findOne({ email });
         if (existingAdmin) {
             return res.status(400).json({ msg: "Admin already exists" });
@@ -68,7 +68,7 @@ const loginAdmin = async (req, res) => {
 };
 const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({}, { username: 1, _id: 0 }); // Only fetch usernames
+        const users = await userModel.find({}, { username: 1, _id: 0 }); // Only fetch usernames
         const usernames = users.map(user => user.username);
         res.json(usernames);
     } catch (err) {
@@ -79,7 +79,7 @@ const getAllUsers = async (req, res) => {
 const getUserByUsername = async (req, res) => {
     const { username } = req.params;
     try {
-        const user = await User.findOne({ username });
+        const user = await userModel.findOne({ username });
         if (!user) {
             return res.status(404).json({ msg: "User not found" });
         }
@@ -94,17 +94,18 @@ const getUserByUsername = async (req, res) => {
 const deleteUserByUsername = async (req, res) => {
     const { username } = req.params;
     try {
-        const user = await User.findOne({ username });
+        const user = await userModel.findOne({ username });
         if (!user) {
             return res.status(404).json({ msg: "User not found" });
         }
-        await user.remove();
+        await user.deleteOne(); // Use deleteOne() to remove the user
         res.json({ msg: "User deleted successfully" });
     } catch (err) {
         console.error('Server Error:', err.message);
         res.status(500).send('Server Error');
     }
 };
+
 
 module.exports = {
     registerAdmin,

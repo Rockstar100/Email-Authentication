@@ -53,7 +53,7 @@ const createUser = async (req, res) => {
         await user.save();
 
         // Send OTP email
-        const inviteLink = `http://localhost:5001/api/user/verify?otp=${otp}&email=${email}`;
+        const inviteLink = `https://email-authentication-t05v.onrender.com/api/user/verify?otp=${otp}&email=${email}`;
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
